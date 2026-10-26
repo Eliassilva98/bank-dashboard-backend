@@ -1,0 +1,52 @@
+{
+  "name": "bank-dashboard-backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "license": "MIT",
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --coverage",
+    "lint": "eslint src/ tests/",
+    "lint:fix": "eslint src/ tests/ --fix",
+    "format": "prettier --write \"{src,tests}/**/*.js\""
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {},
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/server.js"
+    ]
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.2.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.8",
+    "supertest": "^7.3.1"
+  }
+}
