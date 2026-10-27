@@ -6,27 +6,27 @@
 
 ## Funcionalidades
 
-| Área | O que a API oferece |
-| --- | --- |
-| Autenticação | Cadastro, login com JWT e proteção de rotas |
+| Área                 | O que a API oferece                                         |
+| -------------------- | ----------------------------------------------------------- |
+| Autenticação         | Cadastro, login com JWT e proteção de rotas                 |
 | Recuperação de senha | Envio de link por e-mail com token temporário, de uso único |
-| Contas | Consulta de conta, saldo, receitas e despesas |
-| Movimentações | Depósitos e transferências com persistência em PostgreSQL |
-| Extrato | Histórico de transações, com filtros e paginação |
-| Mercado | Cotação do dólar, Selic e CDI, com tratamento de falhas |
+| Contas               | Consulta de conta, saldo, receitas e despesas               |
+| Movimentações        | Depósitos e transferências com persistência em PostgreSQL   |
+| Extrato              | Histórico de transações, com paginação                      |
+| Mercado              | Cotação do dólar, Selic e CDI, com tratamento de falhas     |
 
 ## Tecnologias
 
-| Categoria | Tecnologias |
-| --- | --- |
-| API | Node.js, JavaScript, Express.js |
-| Banco de dados | PostgreSQL, SQL, `pg` |
-| Autenticação | JWT (`jsonwebtoken`), `bcryptjs` |
-| Segurança | Helmet, CORS, Express Rate Limit |
-| E-mail | Nodemailer |
-| Integrações | AwesomeAPI, BrasilAPI, Banco Central do Brasil (BCB) |
-| Testes | Jest, Supertest |
-| Qualidade e desenvolvimento | ESLint, Prettier, Nodemon, Yarn |
+| Categoria                   | Tecnologias                                          |
+| --------------------------- | ---------------------------------------------------- |
+| API                         | Node.js, JavaScript, Express.js                      |
+| Banco de dados              | PostgreSQL, SQL, `pg`                                |
+| Autenticação                | JWT (`jsonwebtoken`), `bcryptjs`                     |
+| Segurança                   | Helmet, CORS, Express Rate Limit                     |
+| E-mail                      | Nodemailer                                           |
+| Integrações                 | AwesomeAPI, BrasilAPI, Banco Central do Brasil (BCB) |
+| Testes                      | Jest, Supertest                                      |
+| Qualidade e desenvolvimento | ESLint, Prettier, Nodemon, Yarn                      |
 
 ## Arquitetura
 
@@ -34,34 +34,34 @@ A API segue uma **arquitetura em camadas**, separando o recebimento das requisi�
 
 ```text
 Requisição HTTP
-      |
-      v
-    Routes
-      |
-      v
+       │
+       ▼
+     Routes
+       │
+       ▼
   Controllers
-      |
-      v
-   Services --------> E-mail / APIs externas
-      |
-      v
+       │
+       ▼
+   Services ────────► E-mail / APIs externas
+       │
+       ▼
  Repositories
-      |
-      v
+       │
+       ▼
   PostgreSQL
 ```
 
 ### Responsabilidades das camadas
 
-| Camada | Localização | Responsabilidade |
-| --- | --- | --- |
-| **Rotas** | `src/routes/` | Definir endpoints e aplicar middlewares |
-| **Controllers** | `src/controllers/` | Receber requisições e enviar respostas HTTP |
-| **Services** | `src/services/` | Executar regras de negócio e integrações |
-| **Repositories** | `src/repositories/` | Centralizar consultas SQL e persistência |
-| **Middlewares** | `src/middlewares/` | Autenticação, rate limiting e tratamento de erros |
-| **Configuração** | `src/config/` | Validar variáveis de ambiente e configurar o banco |
-| **Utilitários** | `src/utils/` | Erros, funções assíncronas e paginação |
+| Camada           | Localização         | Responsabilidade                                   |
+| ---------------- | ------------------- | -------------------------------------------------- |
+| **Rotas**        | `src/routes/`       | Definir endpoints e aplicar middlewares            |
+| **Controllers**  | `src/controllers/`  | Receber requisições e enviar respostas HTTP        |
+| **Services**     | `src/services/`     | Executar regras de negócio e integrações           |
+| **Repositories** | `src/repositories/` | Centralizar consultas SQL e persistência           |
+| **Middlewares**  | `src/middlewares/`  | Autenticação, rate limiting e tratamento de erros  |
+| **Configuração** | `src/config/`       | Validar variáveis de ambiente e configurar o banco |
+| **Utilitários**  | `src/utils/`        | Erros, funções assíncronas e paginação             |
 
 ### Organização do repositório
 
@@ -69,44 +69,43 @@ A estrutura abaixo mostra as pastas principais sem sobrecarregar a leitura com t
 
 ```text
 bank-dashboard-backend/
-|
-+-- migrations/          # Evolução do esquema PostgreSQL
-+-- scripts/             # Scripts auxiliares
-+-- src/
-|   +-- config/          # Ambiente e conexão com o banco
-|   +-- controllers/     # Entrada e saída HTTP
-|   +-- middlewares/     # Segurança e erros
-|   +-- repositories/    # Consultas SQL
-|   +-- routes/          # Endpoints da API
-|   +-- services/        # Regras de negócio
-|   +-- utils/           # Funções auxiliares
-|   +-- app.js           # Configuração do Express
-|   +-- server.js        # Inicialização do servidor
-+-- tests/
-|   +-- helpers/         # Apoio aos testes
-|   +-- integration/     # Testes de integração
-|   +-- unit/            # Testes unitários
-|   +-- setup.js         # Configuração dos testes
-+-- .env.example         # Exemplo sem credenciais reais
-+-- .gitignore
-+-- package.json
-+-- yarn.lock
+├── migrations/          # Evolução do esquema PostgreSQL
+├── scripts/             # Scripts auxiliares
+├── src/
+│   ├── config/          # Ambiente e conexão com o banco
+│   ├── controllers/     # Entrada e saída HTTP
+│   ├── middlewares/     # Segurança e erros
+│   ├── repositories/    # Consultas SQL
+│   ├── routes/          # Endpoints da API
+│   ├── services/        # Regras de negócio
+│   ├── utils/           # Funções auxiliares
+│   ├── app.js           # Configuração do Express
+│   └── server.js        # Inicialização do servidor
+├── tests/
+│   ├── helpers/         # Apoio aos testes
+│   ├── integration/     # Testes de integração
+│   ├── unit/            # Testes unitários
+│   └── setup.js         # Configuração dos testes
+├── .env.example         # Exemplo sem credenciais reais
+├── .gitignore
+├── package.json
+└── yarn.lock
 ```
 
 ### Arquivos e responsabilidades principais
 
-| Arquivo | Papel no projeto |
-| --- | --- |
-| `src/config/env.js` | Lê e valida as variáveis de ambiente |
-| `src/config/database.js` | Gerencia o pool PostgreSQL e as transações SQL |
-| `src/services/authService.js` | Cadastro, login e redefinição de senha |
-| `src/services/accountService.js` | Regras relacionadas às contas |
-| `src/services/marketService.js` | Consulta de indicadores econômicos |
-| `src/services/mailService.js` | Envio de e-mails com Nodemailer |
-| `src/repositories/resetTokenRepository.js` | Armazena o hash dos tokens de redefinição |
-| `src/middlewares/authMiddleware.js` | Valida o JWT em rotas protegidas |
-| `src/middlewares/rateLimiter.js` | Limita tentativas em rotas sensíveis |
-| `src/middlewares/errorHandler.js` | Padroniza respostas de erro |
+| Arquivo                                    | Papel no projeto                               |
+| ------------------------------------------ | ---------------------------------------------- |
+| `src/config/env.js`                        | Lê e valida as variáveis de ambiente           |
+| `src/config/database.js`                   | Gerencia o pool PostgreSQL e as transações SQL |
+| `src/services/authService.js`              | Cadastro, login e redefinição de senha         |
+| `src/services/accountService.js`           | Regras relacionadas às contas                  |
+| `src/services/marketService.js`            | Consulta de indicadores econômicos             |
+| `src/services/mailService.js`              | Envio de e-mails com Nodemailer                |
+| `src/repositories/resetTokenRepository.js` | Armazena o hash dos tokens de redefinição      |
+| `src/middlewares/authMiddleware.js`        | Valida o JWT em rotas protegidas               |
+| `src/middlewares/rateLimiter.js`           | Limita tentativas em rotas sensíveis           |
+| `src/middlewares/errorHandler.js`          | Padroniza respostas de erro                    |
 
 ## Exemplo de fluxo: recuperação de senha
 
@@ -121,25 +120,25 @@ O fluxo passa por diferentes camadas da API e evita expor se um e-mail está cad
 
 ```text
 Solicitação de recuperação
-          |
-          v
-    auth.routes.js
-      + rateLimiter
-          |
-          v
-   authController.js
-          |
-          v
- authService.forgotPassword
-          |
-          +--> resetTokenRepository.js
-          |         Salva hash do token
-          |
-          +--> mailService.js
-                    Envia link por e-mail
-          |
-          v
-    Resposta genérica
+            │
+            ▼
+      auth.routes.js
+        + rateLimiter
+            │
+            ▼
+     authController.js
+            │
+            ▼
+  authService.forgotPassword
+            │
+            ├──► resetTokenRepository.js
+            │      Salva hash do token
+            │
+            ├──► mailService.js
+            │      Envia link por e-mail
+            │
+            ▼
+      Resposta genérica
 ```
 
 O endereço de redefinição é montado a partir de `FRONTEND_URL`. A interface que abre esse link pertence a outro repositório; **este repositório contém somente a API**.
@@ -183,12 +182,14 @@ JWT_EXPIRES_IN=1d
 CORS_ORIGIN=http://localhost:5173
 FRONTEND_URL=http://localhost:5173
 
-SMTP_HOST=smtp.ethereal.email
-SMTP_PORT=587
-SMTP_USER=usuario_de_teste
-SMTP_PASS=senha_de_teste
-MAIL_FROM="Bank Dashboard <no-reply@bankdashboard.com>"
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=seu_email@gmail.com
+SMTP_PASS=senha_de_app_do_google
+MAIL_FROM="Bank Dashboard <seu_email@gmail.com>"
 ```
+
+> **E-mail com Gmail:** ative a verificação em duas etapas na conta Google e gere uma **senha de app** em `myaccount.google.com/apppasswords`. Use essa senha em `SMTP_PASS`, sem espaços, e o mesmo endereço em `SMTP_USER` e `MAIL_FROM`.
 
 > **Segurança:** nunca publique o `.env`, senhas, tokens ou credenciais reais. O `.env.example` deve conter somente valores ilustrativos. Ajuste as URLs, o banco e o SMTP conforme seu ambiente.
 
@@ -235,7 +236,6 @@ Os comandos acima são os scripts informados na documentação do projeto. Consu
 
 ## Melhorias futuras
 
-- Publicar a API e o banco em ambiente de produção.
 - Documentar os endpoints com Swagger/OpenAPI.
 - Configurar CI/CD com GitHub Actions.
 - Adicionar logs estruturados e observabilidade.
