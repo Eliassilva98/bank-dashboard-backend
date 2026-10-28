@@ -11,7 +11,9 @@ if (missing.length > 0) {
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 
-const corsOrigin = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+const corsOrigin = (
+  process.env.CORS_ORIGIN || 'bank-dashboard-frontend-zky1.vercel.app'
+)
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean)
@@ -25,10 +27,9 @@ export const env = {
   corsOrigin,
   isDev: nodeEnv === 'development',
 
-  frontendUrl: (process.env.FRONTEND_URL || 'http://localhost:5173').replace(
-    /\/$/,
-    ''
-  ),
+  frontendUrl: (
+    process.env.FRONTEND_URL || 'bank-dashboard-frontend-zky1.vercel.app'
+  ).replace(/\/$/, ''),
 
   smtp: {
     host: process.env.SMTP_HOST,
