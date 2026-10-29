@@ -34,9 +34,11 @@ const escapeHtml = (value) => {
 }
 
 const parseSender = (from) => {
-  const match = /^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/.exec(from)
-  if (match) return { name: match[1].trim() || undefined, email: match[2] }
-  return { email: from.trim() }
+  const cleaned = from.trim().replace(/^["']+|["']+$/g, '')
+  const match = /^"?([^"<]*?)"?\s*<([^>]+)>$/.exec(cleaned)
+  if (match)
+    return { name: match[1].trim() || undefined, email: match[2].trim() }
+  return { email: cleaned }
 }
 
 const sendWithBrevo = async ({ to, subject, text, html }) => {
