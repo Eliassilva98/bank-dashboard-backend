@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-export function mockDatabase() {
+export const mockDatabase = () => {
   const client = { query: jest.fn() }
   const database = {
     pool: { query: jest.fn() },

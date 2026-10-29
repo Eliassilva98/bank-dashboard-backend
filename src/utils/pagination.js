@@ -5,7 +5,7 @@ export const MAX_PAGE_SIZE = 50
 
 const INTEGER_REGEX = /^\d+$/
 
-function parsePositiveInteger(rawValue, { name, defaultValue, max }) {
+const parsePositiveInteger = (rawValue, { name, defaultValue, max }) => {
   if (rawValue === undefined || rawValue === '') return defaultValue
 
   if (typeof rawValue !== 'string' || !INTEGER_REGEX.test(rawValue)) {
@@ -25,7 +25,7 @@ function parsePositiveInteger(rawValue, { name, defaultValue, max }) {
   return value
 }
 
-export function parsePagination(query) {
+export const parsePagination = (query) => {
   return {
     page: parsePositiveInteger(query.page, {
       name: 'page',

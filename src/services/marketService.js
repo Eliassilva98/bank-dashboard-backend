@@ -28,7 +28,7 @@ const awesomeApiClient = axios.create({
   timeout: AWESOME_TIMEOUT_MS
 })
 
-function withCache(loader, ttlMs) {
+const withCache = (loader, ttlMs) => {
   let cachedValue = null
   let expiresAt = 0
   let retryAt = 0
@@ -68,7 +68,7 @@ function withCache(loader, ttlMs) {
   }
 }
 
-async function getData(client, url) {
+const getData = async (client, url) => {
   try {
     const { data } = await client.get(url)
 
@@ -92,7 +92,7 @@ const toNumber = (raw) => {
   return Number.isFinite(value) ? value : null
 }
 
-async function fetchDolar() {
+const fetchDolar = async () => {
   const data = await getData(awesomeApiClient, '/last/USD-BRL')
   const value = toNumber(data?.USDBRL?.bid)
 
@@ -109,7 +109,7 @@ async function fetchDolar() {
 
 const todayBr = () => new Date().toLocaleDateString('pt-BR')
 
-async function fetchFromBrasilApi(name) {
+const fetchFromBrasilApi = async (name) => {
   const data = await getData(brasilApiClient, `/${name}`)
   const value = toNumber(data?.valor)
 
@@ -120,7 +120,7 @@ async function fetchFromBrasilApi(name) {
   return { date: todayBr(), value }
 }
 
-async function fetchFromBcb(seriesId) {
+const fetchFromBcb = async (seriesId) => {
   const data = await getData(
     bcbClient,
     `/bcdata.sgs.${seriesId}/dados/ultimos/1?formato=json`
@@ -135,7 +135,7 @@ async function fetchFromBcb(seriesId) {
   return { date: entry.data, value }
 }
 
-async function fetchInterestRate(name) {
+const fetchInterestRate = async (name) => {
   try {
     return await fetchFromBrasilApi(name)
   } catch {

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { env } from '#config/env.js'
 import { AppError } from '#utils/AppError.js'
 
-export function authenticate(req, _res, next) {
+export const authenticate = (req, _res, next) => {
   const authHeader = req.headers.authorization
 
   if (!authHeader?.startsWith('Bearer ')) {

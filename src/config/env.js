@@ -32,6 +32,8 @@ export const env = {
     'https://bank-dashboard-frontend-zky1.vercel.app'
   ).replace(/\/$/, ''),
 
+  brevoApiKey: process.env.BREVO_API_KEY,
+
   smtp: {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,

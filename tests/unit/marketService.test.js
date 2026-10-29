@@ -25,7 +25,7 @@ let now
 
 const fail = () => Promise.reject(new Error('timeout of 5000ms exceeded'))
 
-function respondWith({ dolar, selic, cdi, bcb }) {
+const respondWith = ({ dolar, selic, cdi, bcb }) => {
   clients[AWESOME].get.mockImplementation(dolar)
   clients[BRASIL_API].get.mockImplementation((url) =>
     url === '/selic' ? selic() : cdi()

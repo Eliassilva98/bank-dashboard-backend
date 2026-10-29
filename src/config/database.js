@@ -3,7 +3,7 @@ import { env } from './env.js'
 
 export const pool = new pg.Pool({ connectionString: env.databaseUrl })
 
-export async function withTransaction(callback) {
+export const withTransaction = async (callback) => {
   const client = await pool.connect()
 
   try {

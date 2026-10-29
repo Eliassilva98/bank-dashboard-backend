@@ -17,17 +17,17 @@ const PG_UNIQUE_VIOLATION = '23505'
 const FORGOT_PASSWORD_MESSAGE =
   'Se o e-mail estiver cadastrado, você receberá as instruções de redefinição.'
 
-function hashToken(token) {
+const hashToken = (token) => {
   return crypto.createHash('sha256').update(token).digest('hex')
 }
 
-function validatePassword(password) {
+const validatePassword = (password) => {
   if (typeof password !== 'string' || password.length < 8) {
     throw new AppError('A senha deve ter no mínimo 8 caracteres')
   }
 }
 
-function normalizeEmail(email) {
+const normalizeEmail = (email) => {
   return typeof email === 'string' ? email.trim().toLowerCase() : ''
 }
 

@@ -3,7 +3,7 @@ import { env } from '#config/env.js'
 
 let transporter
 
-function getTransporter() {
+const getTransporter = () => {
   if (transporter) return transporter
 
   const { host, port, user, pass } = env.smtp
@@ -24,7 +24,7 @@ function getTransporter() {
   return transporter
 }
 
-function escapeHtml(value) {
+const escapeHtml = (value) => {
   return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -33,12 +33,48 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;')
 }
 
+const parseSender = (from) => {
+  const match = /^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/.exec(from)
+  if (match) return { name: match[1].trim() || undefined, email: match[2] }
+  return { email: from.trim() }
+}
+
+const sendWithBrevo = async ({ to, subject, text, html }) => {
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': env.brevoApiKey,
+      'content-type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify({
+      sender: parseSender(env.smtp.from),
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+      htmlContent: html
+    })
+  })
+
+  if (!response.ok) {
+    const detail = await response.text()
+    throw new Error(`Brevo respondeu ${response.status}: ${detail}`)
+  }
+
+  return response.json()
+}
+
+const send = (message) => {
+  if (env.brevoApiKey) return sendWithBrevo(message)
+
+  return getTransporter().sendMail({ from: env.smtp.from, ...message })
+}
+
 export const mailService = {
   async sendPasswordReset({ to, name, resetLink, expiresInMinutes = 60 }) {
     const safeName = escapeHtml(name)
 
-    return getTransporter().sendMail({
-      from: env.smtp.from,
+    return send({
       to,
       subject: 'Redefinição de senha',
       text: [
