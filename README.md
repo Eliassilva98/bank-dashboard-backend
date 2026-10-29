@@ -23,7 +23,7 @@
 | Banco de dados              | PostgreSQL, SQL, `pg`                                |
 | Autenticação                | JWT (`jsonwebtoken`), `bcryptjs`                     |
 | Segurança                   | Helmet, CORS, Express Rate Limit                     |
-| E-mail                      | Nodemailer                                           |
+| E-mail                      | Nodemailer (SMTP), API do Brevo                      |
 | Integrações                 | AwesomeAPI, BrasilAPI, Banco Central do Brasil (BCB) |
 | Testes                      | Jest, Supertest                                      |
 | Qualidade e desenvolvimento | ESLint, Prettier, Nodemon, Yarn                      |
@@ -142,6 +142,19 @@ Solicitação de recuperação
 ```
 
 O endereço de redefinição é montado a partir de `FRONTEND_URL`. A interface que abre esse link pertence a outro repositório; **este repositório contém somente a API**.
+
+### Envio de e-mail
+
+O `mailService` suporta dois modos de envio, escolhidos pelas variáveis de ambiente:
+
+| Modo                  | Quando é usado                       | Configuração                                                    |
+| --------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| **API do Brevo**      | Quando `BREVO_API_KEY` está definida | `BREVO_API_KEY` e `MAIL_FROM`                                   |
+| **SMTP (Nodemailer)** | Quando `BREVO_API_KEY` não existe    | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` |
+
+> **Limitação conhecida em produção:** provedores de e-mail exigem, para boa entrega, um **domínio próprio autenticado** (SPF, DKIM e DMARC) como remetente. Este projeto de portfólio não utiliza domínio próprio, então os e-mails enviados a partir de um endereço gratuito (como `@gmail.com`) podem ser marcados como spam ou não chegar a todos os destinatários. A hospedagem também pode bloquear conexões SMTP de saída (como ocorre no Railway em planos gratuitos), por isso a API HTTPS do Brevo é o modo recomendado em produção.
+>
+> **O código já está pronto para produção:** com um domínio verificado, basta cadastrá-lo no Brevo, criar o remetente (por exemplo `no-reply@seudominio.com`) e configurar `BREVO_API_KEY` e `MAIL_FROM`. Nenhuma alteração de código é necessária.
 
 ## Como executar localmente
 
