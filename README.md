@@ -69,6 +69,8 @@ A estrutura abaixo mostra as pastas principais sem sobrecarregar a leitura com t
 
 ```text
 bank-dashboard-backend/
+├── docs/
+│   └── media/           # GIFs e imagens da demonstração
 ├── migrations/          # Evolução do esquema PostgreSQL
 ├── scripts/             # Scripts auxiliares
 ├── src/
@@ -142,6 +144,22 @@ Solicitação de recuperação
 ```
 
 O endereço de redefinição é montado a partir de `FRONTEND_URL`. A interface que abre esse link pertence a outro repositório; **este repositório contém somente a API**.
+
+### Demonstração
+
+Fluxo real em produção (Vercel → Railway → Brevo → Gmail), do pedido de recuperação até o login com a nova senha.
+
+**1. Solicitação de recuperação**
+
+![Solicitação de recuperação de senha](docs/media/01-esqueci-senha.gif)
+
+**2. E-mail recebido**
+
+![E-mail de redefinição de senha recebido](docs/media/02-email-recebido.png)
+
+**3. Nova senha e login**
+
+![Redefinição de senha e login](docs/media/03-redefinir-senha.gif)
 
 ### Envio de e-mail
 
