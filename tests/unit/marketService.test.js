@@ -123,6 +123,41 @@ describe('marketService.getOverview', () => {
     expect(result.dolar).not.toBeNull()
   })
 
+  it('usa o BCB como reserva do dólar quando a AwesomeAPI falha', async () => {
+    respondWith({
+      ...healthy,
+      dolar: fail,
+      bcb: async () => ({
+        data: [
+          { data: '28/10/2026', valor: '5.0000' },
+          { data: '29/10/2026', valor: '5.1000' }
+        ]
+      })
+    })
+
+    const { dolar } = await marketService.getOverview()
+
+    expect(dolar.value).toBe(5.1)
+    expect(dolar.variationPct).toBeCloseTo(2, 5)
+    expect(dolar.updatedAt).toBe('29/10/2026')
+  })
+
+  it('reserva do dólar com um único dia no BCB tem variação 0', async () => {
+    respondWith({
+      ...healthy,
+      dolar: fail,
+      bcb: async () => ({ data: [{ data: '29/10/2026', valor: '5.1000' }] })
+    })
+
+    const { dolar } = await marketService.getOverview()
+
+    expect(dolar).toEqual({
+      value: 5.1,
+      variationPct: 0,
+      updatedAt: '29/10/2026'
+    })
+  })
+
   it('a falha de um indicador não derruba os outros', async () => {
     respondWith({ ...healthy, dolar: fail })
 

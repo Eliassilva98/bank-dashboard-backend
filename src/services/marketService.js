@@ -9,6 +9,7 @@ const INTEREST_CACHE_TTL_MS = 60 * 60 * 1000
 const FAILURE_COOLDOWN_MS = 60 * 1000
 
 const SGS_SERIES = {
+  dolar: 1,
   selic: 1178,
   cdi: 4389
 }
@@ -92,7 +93,7 @@ const toNumber = (raw) => {
   return Number.isFinite(value) ? value : null
 }
 
-const fetchDolar = async () => {
+const fetchDolarFromAwesome = async () => {
   const data = await getData(awesomeApiClient, '/last/USD-BRL')
   const value = toNumber(data?.USDBRL?.bid)
 
@@ -104,6 +105,33 @@ const fetchDolar = async () => {
     value,
     variationPct: toNumber(data.USDBRL.pctChange) ?? 0,
     updatedAt: data.USDBRL.create_date
+  }
+}
+
+const fetchDolarFromBcb = async () => {
+  const data = await getData(
+    bcbClient,
+    `/bcdata.sgs.${SGS_SERIES.dolar}/dados/ultimos/2?formato=json`
+  )
+  const entries = Array.isArray(data) ? data : []
+  const last = entries.at(-1)
+  const value = toNumber(last?.valor)
+
+  if (value === null) {
+    throw new AppError('Serviço de mercado indisponível', 502)
+  }
+
+  const previous = toNumber(entries.at(-2)?.valor)
+  const variationPct = previous ? ((value - previous) / previous) * 100 : 0
+
+  return { value, variationPct, updatedAt: last.data }
+}
+
+const fetchDolar = async () => {
+  try {
+    return await fetchDolarFromAwesome()
+  } catch {
+    return fetchDolarFromBcb()
   }
 }
 
